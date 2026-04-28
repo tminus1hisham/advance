@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'theme/theme.dart';
+import 'services/storage_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
@@ -20,18 +21,28 @@ import 'screens/states/offline_state.dart';
 import 'screens/states/general_error_state.dart';
 import 'screens/states/account_locked.dart';
 import 'blocs/auth/auth_bloc.dart';
+import 'blocs/loan/loan_bloc.dart';
+import 'blocs/user/user_bloc.dart';
 
-void main() {
-  runApp(const AdvanceApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final storageService = await StorageService.getInstance();
+  runApp(AdvanceApp(storageService: storageService));
 }
 
 class AdvanceApp extends StatelessWidget {
-  const AdvanceApp({super.key});
+  final StorageService storageService;
+
+  const AdvanceApp({super.key, required this.storageService});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AuthBloc(storageService: storageService)),
+        BlocProvider(create: (_) => LoanBloc(storageService: storageService)),
+        BlocProvider(create: (_) => UserBloc(storageService: storageService)),
+      ],
       child: MaterialApp(
         title: 'Advance',
         theme: AdvanceTheme.lightTheme,
@@ -41,9 +52,7 @@ class AdvanceApp extends StatelessWidget {
           '/login': (context) => const LoginScreen(),
           '/dashboard': (context) => const DashboardScreen(),
           '/loan/new': (context) => const NewLoanRequestScreen(),
-          '/loan/review': (context) => LoanReviewScreen(
-            loanAmount: ModalRoute.of(context)?.settings.arguments as double? ?? 0.0,
-          ),
+          '/loan/review': (context) => const LoanReviewScreen(),
           '/loan/pin_confirmation': (context) => const PinConfirmationScreen(),
           '/loan/success': (context) => const LoanRequestSuccessScreen(),
           '/loan/disbursed': (context) => const LoanDisbursedScreen(),

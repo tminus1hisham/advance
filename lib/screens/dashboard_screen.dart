@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../blocs/user/user_bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -12,187 +14,207 @@ class _DashboardScreenState extends State<DashboardScreen> {
   int _currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    context.read<UserBloc>().add(LoadUserProfile());
+  }
+
+  String _formatCurrency(double amount) {
+    return amount.toInt().toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]},',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Advance'),
-        backgroundColor: theme.colorScheme.surface,
-        foregroundColor: theme.colorScheme.onSurface,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              Navigator.pushNamed(context, '/utilities/notifications');
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.account_circle_outlined),
-            onPressed: () {
-              Navigator.pushNamed(context, '/account/profile');
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Good Morning,',
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1, duration: 400.ms),
-            const SizedBox(height: 4),
-            Text(
-              'Jane Doe',
-              style: theme.textTheme.headlineMedium,
-            ).animate(delay: 100.ms).fadeIn(duration: 400.ms).slideX(begin: -0.1, duration: 400.ms),
-            const SizedBox(height: 24),
-            // Balance Card
-            Card(
-              color: theme.colorScheme.primary,
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Available Limit',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'KES 150,000',
-                      style: theme.textTheme.headlineLarge?.copyWith(
-                        color: theme.colorScheme.onPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: theme.colorScheme.primary,
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/loan/new');
-                      },
-                      child: const Text('Request Loan'),
-                    ),
-                  ],
-                ),
-              ),
-            ).animate(delay: 200.ms).fadeIn(duration: 500.ms).scale(begin: const Offset(0.9, 0.9), duration: 500.ms, curve: Curves.easeOutBack),
-            const SizedBox(height: 32),
-            Text(
-              'Quick Actions',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildActionItem(
-                  context,
-                  icon: Icons.history,
-                  label: 'History',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/account/history');
-                  },
-                ).animate(delay: 300.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
-                _buildActionItem(
-                  context,
-                  icon: Icons.payment,
-                  label: 'Repay',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/account/repay');
-                  },
-                ).animate(delay: 400.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
-                _buildActionItem(
-                  context,
-                  icon: Icons.support_agent,
-                  label: 'Support',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/utilities/support');
-                  },
-                ).animate(delay: 500.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
-              ],
-            ),
-            const SizedBox(height: 32),
-            Text(
-              'Recent Activity',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 3,
-                separatorBuilder: (context, index) => const Divider(height: 1),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                      child: Icon(
-                        index == 0 ? Icons.call_made : Icons.call_received,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                    title: Text(index == 0 ? 'Loan Repayment' : 'Loan Disbursed'),
-                    subtitle: Text(index == 0 ? 'Yesterday' : 'Last Week'),
-                    trailing: Text(
-                      index == 0 ? '- KES 5,000' : '+ KES 50,000',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: index == 0 ? theme.colorScheme.onSurface : theme.colorScheme.primary,
-                      ),
-                    ),
-                  ).animate(delay: (600 + index * 100).ms).fadeIn(duration: 400.ms).slideX(begin: 0.1, duration: 400.ms);
+    return BlocBuilder<UserBloc, UserState>(
+      builder: (context, userState) {
+        final userName = userState is UserLoaded ? userState.name : 'User';
+        final availableLimit = userState is UserLoaded ? userState.availableLimit : 0.0;
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Advance'),
+            backgroundColor: theme.colorScheme.surface,
+            foregroundColor: theme.colorScheme.onSurface,
+            elevation: 0,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/utilities/notifications');
                 },
               ),
-            ).animate(delay: 500.ms).fadeIn(duration: 400.ms),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.outline,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+              IconButton(
+                icon: const Icon(Icons.account_circle_outlined),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/account/profile');
+                },
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            activeIcon: Icon(Icons.account_balance_wallet),
-            label: 'Loans',
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Good Morning,',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1, duration: 400.ms),
+                const SizedBox(height: 4),
+                Text(
+                  userName,
+                  style: theme.textTheme.headlineMedium,
+                ).animate(delay: 100.ms).fadeIn(duration: 400.ms).slideX(begin: -0.1, duration: 400.ms),
+                const SizedBox(height: 24),
+                // Balance Card
+                Card(
+                  color: theme.colorScheme.primary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Available Limit',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: theme.colorScheme.onPrimary.withValues(alpha: 0.8),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'KES ${_formatCurrency(availableLimit)}',
+                          style: theme.textTheme.headlineLarge?.copyWith(
+                            color: theme.colorScheme.onPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: theme.colorScheme.primary,
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/loan/new');
+                          },
+                          child: const Text('Request Loan'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ).animate(delay: 200.ms).fadeIn(duration: 500.ms).scale(begin: const Offset(0.9, 0.9), duration: 500.ms, curve: Curves.easeOutBack),
+                const SizedBox(height: 32),
+                Text(
+                  'Quick Actions',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildActionItem(
+                      context,
+                      icon: Icons.history,
+                      label: 'History',
+                      onTap: () {
+                        Navigator.pushNamed(context, '/account/history');
+                      },
+                    ).animate(delay: 300.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
+                    _buildActionItem(
+                      context,
+                      icon: Icons.payment,
+                      label: 'Repay',
+                      onTap: () {
+                        Navigator.pushNamed(context, '/account/repay');
+                      },
+                    ).animate(delay: 400.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
+                    _buildActionItem(
+                      context,
+                      icon: Icons.support_agent,
+                      label: 'Support',
+                      onTap: () {
+                        Navigator.pushNamed(context, '/utilities/support');
+                      },
+                    ).animate(delay: 500.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  'Recent Activity',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Card(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 3,
+                    separatorBuilder: (context, index) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                          child: Icon(
+                            index == 0 ? Icons.call_made : Icons.call_received,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        title: Text(index == 0 ? 'Loan Repayment' : 'Loan Disbursed'),
+                        subtitle: Text(index == 0 ? 'Yesterday' : 'Last Week'),
+                        trailing: Text(
+                          index == 0 ? '- KES 5,000' : '+ KES 50,000',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: index == 0 ? theme.colorScheme.onSurface : theme.colorScheme.primary,
+                          ),
+                        ),
+                      ).animate(delay: (600 + index * 100).ms).fadeIn(duration: 400.ms).slideX(begin: 0.1, duration: 400.ms);
+                    },
+                  ),
+                ).animate(delay: 500.ms).fadeIn(duration: 400.ms),
+              ],
+            ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Profile',
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: theme.colorScheme.primary,
+            unselectedItemColor: theme.colorScheme.outline,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_balance_wallet_outlined),
+                activeIcon: Icon(Icons.account_balance_wallet),
+                label: 'Loans',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

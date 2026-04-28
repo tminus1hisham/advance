@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../blocs/loan/loan_bloc.dart';
+import '../../blocs/user/user_bloc.dart';
 
 class NewLoanRequestScreen extends StatefulWidget {
   const NewLoanRequestScreen({super.key});
@@ -10,8 +13,22 @@ class NewLoanRequestScreen extends StatefulWidget {
 
 class _NewLoanRequestScreenState extends State<NewLoanRequestScreen> {
   double _loanAmount = 10000;
-  final double _maxLimit = 150000;
+  late double _maxLimit;
   final double _minLimit = 1000;
+
+  @override
+  void initState() {
+    super.initState();
+    final userState = context.read<UserBloc>().state;
+    _maxLimit = userState is UserLoaded ? userState.availableLimit : 150000;
+  }
+
+  String _formatCurrency(int amount) {
+    return amount.toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]},',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +54,7 @@ class _NewLoanRequestScreenState extends State<NewLoanRequestScreen> {
             ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
             const SizedBox(height: 8),
             Text(
-              'Your available limit is KES 150,000',
+              'Your available limit is KES ${_formatCurrency(_maxLimit.toInt())}',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -45,7 +62,7 @@ class _NewLoanRequestScreenState extends State<NewLoanRequestScreen> {
             const SizedBox(height: 48),
             Center(
               child: Text(
-                'KES ${_loanAmount.toInt().toString().replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}',
+                'KES ${_formatCurrency(_loanAmount.toInt())}',
                 style: theme.textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,
@@ -76,13 +93,15 @@ class _NewLoanRequestScreenState extends State<NewLoanRequestScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('KES ${_minLimit.toInt()}', style: theme.textTheme.labelMedium),
-                Text('KES ${_maxLimit.toInt()}', style: theme.textTheme.labelMedium),
+                Text('KES ${_formatCurrency(_maxLimit.toInt())}', style: theme.textTheme.labelMedium),
               ],
             ).animate(delay: 400.ms).fadeIn(duration: 400.ms),
             const Spacer(),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/loan/review', arguments: _loanAmount);
+                // Dispatch to LoanBloc then navigate
+                context.read<LoanBloc>().add(LoanAmountSelected(amount: _loanAmount));
+                Navigator.pushNamed(context, '/loan/review');
               },
               child: const Text('Continue'),
             ).animate(delay: 500.ms).fadeIn(duration: 400.ms).scale(begin: const Offset(0.9, 0.9)),
