@@ -9,9 +9,9 @@ class AdvanceTheme {
       useMaterial3: true,
       colorScheme: const ColorScheme(
         brightness: Brightness.light,
-        primary: Color(0xFF006B47),
+        primary: Color(0xFFD7782C),
         onPrimary: Color(0xFFFFFFFF),
-        primaryContainer: Color(0xFF00875A),
+        primaryContainer: Color(0xFFF39243),
         onPrimaryContainer: Color(0xFFFFFFFF),
         secondary: Color(0xFF00658C),
         onSecondary: Color(0xFFFFFFFF),
@@ -25,14 +25,14 @@ class AdvanceTheme {
         onError: Color(0xFFFFFFFF),
         errorContainer: Color(0xFFFFDAD6),
         onErrorContainer: Color(0xFF93000A),
-        surface: Color(0xFFF5FBF4),
-        onSurface: Color(0xFF171D19),
-        surfaceContainerHighest: Color(0xFFDEE4DE),
-        onSurfaceVariant: Color(0xFF3E4942),
-        outline: Color(0xFF6E7A71),
-        outlineVariant: Color(0xFFBDCAC0),
+        surface: Color(0xFFFFF9F5),
+        onSurface: Color(0xFF221A15),
+        surfaceContainerHighest: Color(0xFFEFE5DE),
+        onSurfaceVariant: Color(0xFF4E453F),
+        outline: Color(0xFF80756D),
+        outlineVariant: Color(0xFFD3C4BB),
       ),
-      scaffoldBackgroundColor: const Color(0xFFF5FBF4),
+      scaffoldBackgroundColor: const Color(0xFFFFF9F5),
       textTheme: textTheme.copyWith(
         headlineLarge: textTheme.headlineLarge?.copyWith(
           fontSize: 32,
@@ -64,7 +64,7 @@ class AdvanceTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF00875A),
+          backgroundColor: const Color(0xFFD7782C),
           foregroundColor: Colors.white,
           minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(
@@ -98,23 +98,23 @@ class AdvanceTheme {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFBDCAC0)),
+          borderSide: const BorderSide(color: Color(0xFFD3C4BB)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFBDCAC0)),
+          borderSide: const BorderSide(color: Color(0xFFD3C4BB)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF006B47), width: 2),
+          borderSide: const BorderSide(color: Color(0xFFD7782C), width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFBA1A1A)),
         ),
-        labelStyle: textTheme.bodyMedium?.copyWith(color: const Color(0xFF3E4942)),
+        labelStyle: textTheme.bodyMedium?.copyWith(color: const Color(0xFF4E453F)),
         floatingLabelStyle: textTheme.bodyMedium?.copyWith(
-          color: const Color(0xFF006B47),
+          color: const Color(0xFFD7782C),
           fontWeight: FontWeight.w600,
         ),
       ),
