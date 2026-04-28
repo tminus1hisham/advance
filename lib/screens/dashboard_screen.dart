@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -45,12 +46,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
-            ),
+            ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1, duration: 400.ms),
             const SizedBox(height: 4),
             Text(
               'Jane Doe',
               style: theme.textTheme.headlineMedium,
-            ),
+            ).animate(delay: 100.ms).fadeIn(duration: 400.ms).slideX(begin: -0.1, duration: 400.ms),
             const SizedBox(height: 24),
             // Balance Card
             Card(
@@ -87,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               ),
-            ),
+            ).animate(delay: 200.ms).fadeIn(duration: 500.ms).scale(begin: const Offset(0.9, 0.9), duration: 500.ms, curve: Curves.easeOutBack),
             const SizedBox(height: 32),
             Text(
               'Quick Actions',
@@ -106,7 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onTap: () {
                     Navigator.pushNamed(context, '/account/history');
                   },
-                ),
+                ).animate(delay: 300.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
                 _buildActionItem(
                   context,
                   icon: Icons.payment,
@@ -114,7 +115,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onTap: () {
                     Navigator.pushNamed(context, '/account/repay');
                   },
-                ),
+                ).animate(delay: 400.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
                 _buildActionItem(
                   context,
                   icon: Icons.support_agent,
@@ -122,7 +123,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onTap: () {
                     Navigator.pushNamed(context, '/utilities/support');
                   },
-                ),
+                ).animate(delay: 500.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
               ],
             ),
             const SizedBox(height: 32),
@@ -157,10 +158,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         color: index == 0 ? theme.colorScheme.onSurface : theme.colorScheme.primary,
                       ),
                     ),
-                  );
+                  ).animate(delay: (600 + index * 100).ms).fadeIn(duration: 400.ms).slideX(begin: 0.1, duration: 400.ms);
                 },
               ),
-            ),
+            ).animate(delay: 500.ms).fadeIn(duration: 400.ms),
           ],
         ),
       ),

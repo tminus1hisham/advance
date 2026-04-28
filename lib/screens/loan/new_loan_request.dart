@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class NewLoanRequestScreen extends StatefulWidget {
   const NewLoanRequestScreen({super.key});
@@ -33,14 +34,14 @@ class _NewLoanRequestScreenState extends State<NewLoanRequestScreen> {
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
-            ),
+            ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
             const SizedBox(height: 8),
             Text(
               'Your available limit is KES 150,000',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
-            ),
+            ).animate(delay: 100.ms).fadeIn(duration: 400.ms).slideY(begin: 0.2, duration: 400.ms),
             const SizedBox(height: 48),
             Center(
               child: Text(
@@ -49,8 +50,8 @@ class _NewLoanRequestScreenState extends State<NewLoanRequestScreen> {
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,
                 ),
-              ),
-            ),
+              ).animate(target: _loanAmount).scale(begin: const Offset(1, 1), end: const Offset(1.05, 1.05), duration: 100.ms).then().scale(begin: const Offset(1.05, 1.05), end: const Offset(1, 1), duration: 100.ms),
+            ).animate(delay: 200.ms).fadeIn(duration: 400.ms).scale(begin: const Offset(0.8, 0.8), duration: 400.ms),
             const SizedBox(height: 32),
             SliderTheme(
               data: SliderThemeData(
@@ -70,21 +71,21 @@ class _NewLoanRequestScreenState extends State<NewLoanRequestScreen> {
                   });
                 },
               ),
-            ),
+            ).animate(delay: 300.ms).fadeIn(duration: 500.ms).slideY(begin: 0.3, duration: 500.ms),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('KES ${_minLimit.toInt()}', style: theme.textTheme.labelMedium),
                 Text('KES ${_maxLimit.toInt()}', style: theme.textTheme.labelMedium),
               ],
-            ),
+            ).animate(delay: 400.ms).fadeIn(duration: 400.ms),
             const Spacer(),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/loan/review', arguments: _loanAmount);
               },
               child: const Text('Continue'),
-            ),
+            ).animate(delay: 500.ms).fadeIn(duration: 400.ms).scale(begin: const Offset(0.9, 0.9)),
             const SizedBox(height: 16),
           ],
         ),

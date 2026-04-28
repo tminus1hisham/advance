@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class LoanDisbursedScreen extends StatelessWidget {
   const LoanDisbursedScreen({super.key});
@@ -27,7 +28,7 @@ class LoanDisbursedScreen extends StatelessWidget {
                   size: 96,
                   color: theme.colorScheme.tertiary,
                 ),
-              ),
+              ).animate().scale(duration: 600.ms, curve: Curves.easeOutBack).fadeIn(duration: 600.ms),
               const SizedBox(height: 48),
               Text(
                 'Funds Disbursed',
@@ -35,7 +36,7 @@ class LoanDisbursedScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
-              ),
+              ).animate(delay: 200.ms).fadeIn(duration: 500.ms).slideY(begin: 0.2, duration: 500.ms),
               const SizedBox(height: 16),
               Text(
                 'Your loan has been successfully disbursed to your account. You can now access your funds.',
@@ -43,14 +44,14 @@ class LoanDisbursedScreen extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
                 textAlign: TextAlign.center,
-              ),
+              ).animate(delay: 300.ms).fadeIn(duration: 500.ms).slideY(begin: 0.2, duration: 500.ms),
               const Spacer(),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/dashboard');
                 },
                 child: const Text('View Account Balance'),
-              ),
+              ).animate(delay: 500.ms).fadeIn(duration: 500.ms).scale(begin: const Offset(0.9, 0.9)),
               const SizedBox(height: 16),
             ],
           ),

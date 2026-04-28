@@ -33,6 +33,13 @@ class AdvanceTheme {
         outlineVariant: Color(0xFFD3C4BB),
       ),
       scaffoldBackgroundColor: const Color(0xFFFFF9F5),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
       textTheme: textTheme.copyWith(
         headlineLarge: textTheme.headlineLarge?.copyWith(
           fontSize: 32,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../blocs/auth/auth_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -62,13 +63,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   Icons.lock_person_outlined,
                   size: 64,
                   color: theme.colorScheme.primary,
-                ),
+                )
+                .animate()
+                .scale(duration: 500.ms, curve: Curves.easeOutBack)
+                .fadeIn(duration: 500.ms),
                 const SizedBox(height: 32),
                 Text(
                   'Welcome Back',
                   style: theme.textTheme.headlineLarge,
                   textAlign: TextAlign.center,
-                ),
+                )
+                .animate(delay: 200.ms)
+                .fadeIn(duration: 500.ms)
+                .slideY(begin: 0.2, end: 0, duration: 500.ms, curve: Curves.easeOutCubic),
                 const SizedBox(height: 8),
                 Text(
                   'Sign in to continue to Advance',
@@ -76,7 +83,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                   textAlign: TextAlign.center,
-                ),
+                )
+                .animate(delay: 300.ms)
+                .fadeIn(duration: 500.ms),
                 const SizedBox(height: 48),
                 TextFormField(
                   controller: _identifierController,
@@ -90,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     return null;
                   },
-                ),
+                ).animate(delay: 400.ms).fadeIn(duration: 500.ms).slideY(begin: 0.1, duration: 500.ms),
                 const SizedBox(height: 24),
                 TextFormField(
                   controller: _pinController,
@@ -115,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                     return null;
                   },
-                ),
+                ).animate(delay: 500.ms).fadeIn(duration: 500.ms).slideY(begin: 0.1, duration: 500.ms),
                 const SizedBox(height: 16),
                 Align(
                   alignment: Alignment.centerRight,
@@ -129,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                ),
+                ).animate(delay: 600.ms).fadeIn(duration: 500.ms),
                 const SizedBox(height: 32),
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
@@ -141,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: const Text('Sign In'),
                     );
                   },
-                ),
+                ).animate(delay: 700.ms).fadeIn(duration: 500.ms).scale(begin: const Offset(0.95, 0.95)),
                 const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
