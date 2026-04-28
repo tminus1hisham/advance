@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AdvanceTheme {
   static ThemeData get lightTheme {
-    final textTheme = GoogleFonts.interTextTheme();
+    final textTheme = GoogleFonts.poppinsTextTheme();
 
     return ThemeData(
       useMaterial3: true,
