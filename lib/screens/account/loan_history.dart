@@ -66,6 +66,13 @@ class LoanHistoryScreen extends StatelessWidget {
                   ),
               ],
             ),
+            onTap: () {
+              Navigator.pushNamed(
+                context, 
+                '/account/history/details',
+                arguments: item,
+              );
+            },
           );
         },
       ),

@@ -13,8 +13,12 @@ import 'screens/loan/loan_request_failed.dart';
 import 'screens/account/loan_history.dart';
 import 'screens/account/repayment_screen.dart';
 import 'screens/account/profile_screen.dart';
+import 'screens/account/loan_history_details.dart';
 import 'screens/utilities/support_screen.dart';
 import 'screens/utilities/notifications_screen.dart';
+import 'screens/states/offline_state.dart';
+import 'screens/states/general_error_state.dart';
+import 'screens/states/account_locked.dart';
 import 'blocs/auth/auth_bloc.dart';
 
 void main() {
@@ -45,10 +49,16 @@ class AdvanceApp extends StatelessWidget {
           '/loan/disbursed': (context) => const LoanDisbursedScreen(),
           '/loan/failed': (context) => const LoanRequestFailedScreen(),
           '/account/history': (context) => const LoanHistoryScreen(),
+          '/account/history/details': (context) => LoanHistoryDetailsScreen(
+            loanDetails: ModalRoute.of(context)?.settings.arguments as Map<String, String>? ?? {},
+          ),
           '/account/repay': (context) => const RepaymentScreen(),
           '/account/profile': (context) => const ProfileScreen(),
           '/utilities/support': (context) => const SupportScreen(),
           '/utilities/notifications': (context) => const NotificationsScreen(),
+          '/states/offline': (context) => const OfflineStateScreen(),
+          '/states/error': (context) => const GeneralErrorStateScreen(),
+          '/states/locked': (context) => const AccountLockedScreen(),
         },
         debugShowCheckedModeBanner: false,
       ),
