@@ -23,11 +23,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/utilities/notifications');
+            },
           ),
           IconButton(
             icon: const Icon(Icons.account_circle_outlined),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/account/profile');
+            },
           ),
         ],
       ),
@@ -99,19 +103,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   context,
                   icon: Icons.history,
                   label: 'History',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, '/account/history');
+                  },
                 ),
                 _buildActionItem(
                   context,
                   icon: Icons.payment,
                   label: 'Repay',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, '/account/repay');
+                  },
                 ),
                 _buildActionItem(
                   context,
                   icon: Icons.support_agent,
                   label: 'Support',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, '/utilities/support');
+                  },
                 ),
               ],
             ),
