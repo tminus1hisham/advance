@@ -30,10 +30,10 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.currency_exchange,
-              size: 80,
-              color: Colors.white,
+            Image.asset(
+              'assets/advance_logo.png',
+              width: 120,
+              height: 120,
             )
             .animate()
             .scale(duration: 600.ms, curve: Curves.easeOutBack)
