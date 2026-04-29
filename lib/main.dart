@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'theme/theme.dart';
+import 'theme/theme_controller.dart';
 import 'services/storage_service.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
@@ -24,6 +25,8 @@ import 'blocs/auth/auth_bloc.dart';
 import 'blocs/loan/loan_bloc.dart';
 import 'blocs/user/user_bloc.dart';
 
+final themeController = ThemeController();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final storageService = await StorageService.getInstance();
@@ -43,33 +46,40 @@ class AdvanceApp extends StatelessWidget {
         BlocProvider(create: (_) => LoanBloc(storageService: storageService)),
         BlocProvider(create: (_) => UserBloc(storageService: storageService)),
       ],
-      child: MaterialApp(
-        title: 'Advance',
-        theme: AdvanceTheme.lightTheme,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const SplashScreen(),
-          '/login': (context) => const LoginScreen(),
-          '/dashboard': (context) => const DashboardScreen(),
-          '/loan/new': (context) => const NewLoanRequestScreen(),
-          '/loan/review': (context) => const LoanReviewScreen(),
-          '/loan/pin_confirmation': (context) => const PinConfirmationScreen(),
-          '/loan/success': (context) => const LoanRequestSuccessScreen(),
-          '/loan/disbursed': (context) => const LoanDisbursedScreen(),
-          '/loan/failed': (context) => const LoanRequestFailedScreen(),
-          '/account/history': (context) => const LoanHistoryScreen(),
-          '/account/history/details': (context) => LoanHistoryDetailsScreen(
-            loanDetails: ModalRoute.of(context)?.settings.arguments as Map<String, String>? ?? {},
-          ),
-          '/account/repay': (context) => const RepaymentScreen(),
-          '/account/profile': (context) => const ProfileScreen(),
-          '/utilities/support': (context) => const SupportScreen(),
-          '/utilities/notifications': (context) => const NotificationsScreen(),
-          '/states/offline': (context) => const OfflineStateScreen(),
-          '/states/error': (context) => const GeneralErrorStateScreen(),
-          '/states/locked': (context) => const AccountLockedScreen(),
+      child: ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeController,
+        builder: (context, mode, _) {
+          return MaterialApp(
+            title: 'Advance',
+            theme: AdvanceTheme.lightTheme,
+            darkTheme: AdvanceTheme.darkTheme,
+            themeMode: mode,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => const SplashScreen(),
+              '/login': (context) => const LoginScreen(),
+              '/dashboard': (context) => const DashboardScreen(),
+              '/loan/new': (context) => const NewLoanRequestScreen(),
+              '/loan/review': (context) => const LoanReviewScreen(),
+              '/loan/pin_confirmation': (context) => const PinConfirmationScreen(),
+              '/loan/success': (context) => const LoanRequestSuccessScreen(),
+              '/loan/disbursed': (context) => const LoanDisbursedScreen(),
+              '/loan/failed': (context) => const LoanRequestFailedScreen(),
+              '/account/history': (context) => const LoanHistoryScreen(),
+              '/account/history/details': (context) => LoanHistoryDetailsScreen(
+                loanDetails: ModalRoute.of(context)?.settings.arguments as Map<String, String>? ?? {},
+              ),
+              '/account/repay': (context) => const RepaymentScreen(),
+              '/account/profile': (context) => const ProfileScreen(),
+              '/utilities/support': (context) => const SupportScreen(),
+              '/utilities/notifications': (context) => const NotificationsScreen(),
+              '/states/offline': (context) => const OfflineStateScreen(),
+              '/states/error': (context) => const GeneralErrorStateScreen(),
+              '/states/locked': (context) => const AccountLockedScreen(),
+            },
+            debugShowCheckedModeBanner: false,
+          );
         },
-        debugShowCheckedModeBanner: false,
       ),
     );
   }
